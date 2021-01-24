@@ -1,4 +1,9 @@
-//project code skeleton
+/*
+Name: 		Mina Ashraf Gamil
+ID: 		900182973
+course: 	Analysis and Design of algorithms Lab
+Project:	Search engine using page rank
+*/
 
 #include <iostream>
 #include <fstream>
@@ -9,26 +14,27 @@
 #include <sstream>
 #include <iomanip>
 #include <algorithm>
+
 using namespace std; 
 
 class website
 {
 private: 
-	string link; 
+	string link; 					//the link of each website 
 	
-	vector<string> keywords;
+	vector<string> keywords;		//a list of keywords for each website (Loaded from keywords.csv)
 	
-	float curr_page_rank; 
-	float page_rank_normalized; 
-	float prev_page_rank;
-	float rank;
-	float CTR; 
-	float score; 
+	float curr_page_rank; 			//the current page rank being calculated
+	float page_rank_normalized; 	//the normalized page rank 
+	float prev_page_rank;			//the page rank of the same website in the previous iteration 
+	float rank;						//the rank of the website 
+	float CTR; 						//Click Through Rate = Clicks / Impressions 
+	float score; 					//score based on the equation in the powerpoint 
 	
-	int outgoing_links_number;
-	int clicks; 
-	int impressions; 
-	int ID; 
+	int outgoing_links_number;		//number of outgoing links (useful for PageRank)
+	int clicks; 					//clicks per website
+	int impressions; 				//impressions per webiste 
+	int ID; 						//A unique ID for each website
 
 
 public:
@@ -131,13 +137,13 @@ private:
 	fstream ImpressFile; 
 	fstream ClicksFile; 
 
-	map<string, int> link_to_id;
-	map<int, website*> id_to_website;
-	map<string, vector<int>*> keywords_to_websites;
+	map<string, int> link_to_id; 						//maps each website to an ID 
+	map<int, website*> id_to_website;					//maps this ID to a pointer to a website object 
+	map<string, vector<int>*> keywords_to_websites;		//map each keyword to all IDs of the websites that contain this Keyword
 
-	int number_of_websites;
+	int number_of_websites;								//a counter of websites we have (used in pagerank intialization)
 
-	int ID; 
+	int ID; 											//the unique ID that is assigned to each website 
 public:
 
 	SearchEngine(string web_graph_path, string keywords_path, string impressions_path, string clicks_path);
@@ -369,10 +375,12 @@ void SearchEngine::calculate_page_rank(){
     	}
     	//cout << endl;
 	}
+	/*
 	for (itr = id_to_website.begin(); itr != id_to_website.end(); ++itr) 
 		{
-        	//cout << "rank of " << itr->second->get_link() << " is " << itr->second->get_prev_page_rank() << endl;
+        	cout << "rank of " << itr->second->get_link() << " is " << itr->second->get_prev_page_rank() << endl;
     	}
+    */
 }
 void SearchEngine::calculate_pr_normalization(){
 	map<int, website*>::iterator itr;
@@ -485,7 +493,7 @@ void SearchEngine::search_handler(){
 		for (auto i = ids_of_search_websites.begin(); i != ids_of_search_websites.end(); ++i)
     			{
     				website* t = id_to_website[*i];
-    				std::cout << t->get_link() << '\n';
+    				//std::cout << t->get_link() << '\n';
     				search_result.push_back(id_to_website[*i]);
     			}
 
@@ -579,7 +587,7 @@ vector<int>  SearchEngine::or_handler(vector<string> keywords){
 	//which can later be converted to strings using the id to website map
 vector<int> search_return_id;
 
-	for (int i = 0; i < keywords.size(); ++i)
+	for (int i = 0; i < keywords.size(); i++)
 	{
 		//merge each two together after getting their vectors 
 		//check if keyword exists first 
@@ -607,7 +615,7 @@ vector <int> search_return_id;
 	
 		for (int i=0; i<t->size(); i++) 
 	        {
-	        	//cout << id_to_website[t->at(i)]->get_link() <<" ya mina " << endl;
+	        	//cout << id_to_website[t->at(i)]->get_link() <<" ----- " << endl;
 	        	search_return_id.push_back(t->at(i)); 
 	        }
     
@@ -636,8 +644,6 @@ SearchEngine::~SearchEngine(){
 	ImpressFile.close();
 	ClicksFile.close();
 }
-
-
 
 
 int main(int argc, char const *argv[])
